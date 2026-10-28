@@ -1,8 +1,12 @@
+# KARI-DF26-Skill
+
+**语言 / Language:** [简体中文](#简体中文) · [English](#english)
+
+## 简体中文
+
 > [统一使用文档](https://github.com/xlle-er/KARI-DF26) · 默认安装最新 KARI 稳定固件；离线部署可使用下文 --assets 指向配套本地构建结果。
 
 > [KARI 统一使用文档](https://github.com/xlle-er/KARI-DF26) · 本次为新应用身份与新设备配置，需要重新安装和配置。当前验证结果见 [KARI 验证状态](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md)，历史验证不计入本次通过项。
-
-# KARI-DF26-Skill
 
 用一句话让 Codex 或其他 Agent 部署 KARI ESP32-S3 底盘；也可直接使用跨平台 Python 工具。支持 N16R8、N8R8 的 DevKitC-1 兼容开发板，官方默认接线和自定义 GPIO 共用同一份固件，接线保存在设备中。
 
@@ -86,7 +90,7 @@ py -3 -m venv .venv
 - 连接失败：检查数据线，按住 BOOT、按一下 RST，再松开 BOOT。原生 USB 可能重新枚举；重新 `doctor` 并确认同一块板后使用新串口继续 `configure` / `verify`，不要反复烧录。
 - 未知分区：工具停止且不写入。先单独调查并备份 NVS，再决定迁移方式；工具不提供绕过检查的参数。
 - 保留接线的兼容官方 OTA 可继续使用。擦除 NVS 后需要重新确认接线。旧自定义固件不能可靠读出其 GPIO 常量，第一次迁移必须重新填写。
-- 安装后连接 `KARI-Setup-XXXXXX`，访问 `http://192.168.4.1/` 配网、核对接线并在车轮架空时进行短时方向校准。
+- 安装后连接回读返回的实际 `KARI-名字` 或 `KARI-识别码` 热点，访问 `http://192.168.4.1/` 配网、核对接线并在车轮架空时进行短时方向校准。
 
 ## 开发与验证
 
@@ -98,12 +102,88 @@ py -3 -m venv .venv
 
 ## English
 
-Send this single sentence to Codex to install the skill and continue into first-time flashing:
+[Unified guide](https://github.com/xlle-er/KARI-DF26) · [Current validation](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md). New KARI application/device namespaces require installation and configuration again.
 
-> Install the kari-deploy skill from https://github.com/xlle-er/KARI-DF26-Skill/tree/main/skills/kari-deploy and guide me through installing the latest official firmware on my KARI robot.
+Install the KARI ESP32-S3 chassis with one Agent prompt or the cross-platform Python tool. DevKitC-1-compatible N16R8/N8R8 boards use one firmware for official/custom GPIO wiring, persisted on the device. Latest official stable firmware is the default; participants do not choose a version. Firmware/install-site source is in [KARI-DF26-Firmware](https://github.com/xlle-er/KARI-DF26-Firmware); this tool repository includes no firmware binaries.
 
-The Agent first asks whether you use the activity's recommended board (yes / no / unsure). Yes selects N16R8 and official wiring: follow the [wiring documentation](https://github.com/xlle-er/KARI-DF26-Firmware#官方接线) and disconnect motor power during installation. Other boards receive identification help; only custom wiring requires all six GPIOs. Existing valid wiring is preserved unless you choose to replace it. Previously supplied answers are reused.
+### One-prompt installation
 
-Choose Agent-assisted USB flashing or the web installer. **The public web installer is not deployed yet**; use the Agent or run the installer source locally in desktop Chrome/Edge over HTTPS or localhost. Both routes use the latest official stable firmware without asking for a version number.
+> Fetch the latest main branch of https://github.com/xlle-er/KARI-DF26-Skill, install its skills/kari-deploy skill, and use the matching tools to guide my first installation of the latest official stable firmware.
 
-Requires Python 3.10+ in a project virtual environment. Run `doctor`, inspect the target port, then `install --board n16r8 --use-default-pins` for the recommended board. Use `--profile FILE` for custom wiring; omit both options to preserve existing wiring. Installation checks the returned version against the downloaded manifest, physical memory, readiness and all six GPIOs. Independent `verify` needs no `--version`. Maintainers may explicitly select `--release TAG` (including a requested prerelease) or local `--assets DIRECTORY`. Incompatible hardware, unknown partitions and corrupt downloads stop installation. No motor commands are sent. Compatible official OTA retains wiring.
+The Agent fetches current skill/tool source directly. Clean checkouts fast-forward; edits/divergence are preserved by using a fresh directory. It first asks whether this is the activity's recommended board (yes/no/unsure). Yes selects N16R8 and [official wiring](https://github.com/xlle-er/KARI-DF26-Firmware#官方接线); disconnect motor power, without answering six GPIO questions. Other boards require identification; only custom wiring needs all six GPIOs. Existing valid wiring is preserved unless you choose otherwise. Already supplied answers are reused.
+
+Choose Agent-assisted USB or the [live web installer](https://xlle-er.github.io/KARI-DF26-Firmware/). [Installer source](https://github.com/xlle-er/KARI-DF26-Firmware/tree/main/installer) also runs locally in desktop Chrome/Edge over HTTPS/localhost. The Agent checks USB, downloads/verifies stable assets, flashes and reads back. Multiple ports require target selection. Dependencies use a project environment. It never automatically moves motors, erases NVS or overwrites unknown partitions.
+
+### Manual operation
+
+Python 3.10+, macOS/Linux:
+
+```sh
+git clone https://github.com/xlle-er/KARI-DF26-Skill.git
+cd KARI-DF26-Skill
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+.venv/bin/python -m kari_deploy.cli --json doctor
+.venv/bin/python -m kari_deploy.cli --json inspect --port /dev/cu.YOUR_DEVICE
+.venv/bin/python -m kari_deploy.cli --json install --port /dev/cu.YOUR_DEVICE --board n16r8 --use-default-pins
+```
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/xlle-er/KARI-DF26-Skill.git
+cd KARI-DF26-Skill
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m kari_deploy.cli --json doctor
+.\.venv\Scripts\python.exe -m kari_deploy.cli --json inspect --port COM3
+.\.venv\Scripts\python.exe -m kari_deploy.cli --json install --port COM3 --board n8r8 --use-default-pins
+```
+
+Ports above are examples: use the actual target from doctor and never guess between devices. Use --use-default-pins only for the wiring below. Reinstallation omits both profile options to preserve valid wiring; unconfigured devices need an explicit default/profile choice.
+
+| L298N | GPIO |
+| --- | --- |
+| ENA (left) | 17 |
+| IN1 | 16 |
+| IN2 | 15 |
+| IN3 | 7 |
+| IN4 | 6 |
+| ENB (right) | 5 |
+
+Use GPIO numbers, not header positions. Share GND, remove ENA/ENB jumpers, disconnect motor power for install/configuration. Recommended-board confirmation selects N16R8/default pins; other boards need module/pinout confirmation. Flash detection cannot establish PSRAM or header layout. GPIO output is not enabled before first wiring confirmation; floating motor-driver inputs require disconnected power or appropriate enable pull-downs.
+
+Custom my-wiring.json example:
+
+```json
+{"version":1,"board":"n16r8","pins":{"ena":17,"in1":16,"in2":15,"in3":7,"in4":6,"enb":5}}
+```
+
+```sh
+.venv/bin/python -m kari_deploy.cli --json configure --port /dev/cu.YOUR_DEVICE --board n16r8 --profile my-wiring.json
+.venv/bin/python -m kari_deploy.cli --json verify --port /dev/cu.YOUR_DEVICE --board n16r8 --profile my-wiring.json
+# Maintainers may select matching built USB manifests and segments:
+.venv/bin/python -m kari_deploy.cli --json install --port /dev/cu.YOUR_DEVICE --board n16r8 --profile my-wiring.json --assets ../KARI-DF26-Firmware/dist
+```
+
+First install/configure automatically uses the firmware's built-in initial credential; beginners need not create/enter a password. If a previously configured device rejects it, stop and preserve settings. Only this recovery case accepts the owner's current credential via --password-stdin. Never put personal credentials in command arguments, profiles, logs or Git. Ignored .kari-deploy/ records contain only device ID/version/wiring/verification time.
+
+Exit codes: 0 success; 2 arguments/config/compatibility; 3 dependency/file/network; 4 USB transport; 5 rejection/readback failure. All commands emit JSON on stdout; place explicit --json before the subcommand. Verification compares the device against the downloaded version dynamically, board/memory/six GPIOs and hardware_ready=true; independent verify needs no fixed --version. Maintainers may explicitly request --release TAG (including a prerelease) or --assets DIRECTORY; failures never silently choose preview or bypass checks.
+
+### Recovery and updates
+
+- macOS: prefer /dev/cu.*, close Arduino Serial Monitor/other port owners.
+- Windows: identify COM in Device Manager; install drivers only from the board/bridge vendor.
+- Linux: use distribution serial-group permissions and log in again; no chmod 777.
+- Check a data-capable cable. Hold BOOT, press/release RST, release BOOT for download mode. Native USB may re-enumerate: doctor again, identify the same physical board, then resume configure/verify instead of repeatedly flashing.
+- Unknown partitions stop without writes; separately investigate/back up NVS before migration. There is no bypass option.
+- Compatible official OTA retains wiring; NVS erasure requires confirmation again. GPIO constants in arbitrary custom firmware cannot be reliably recovered.
+- Join the actual returned KARI-name / KARI-ID hotspot, open http://192.168.4.1/, provision Wi-Fi and verify wiring. Lift wheels for brief direction calibration; software readback is separate from real motor tests.
+
+### Development and validation
+
+```sh
+.venv/bin/python -m unittest discover -s tests -v
+```
+
+kari_deploy/boards.json is generated from the firmware's hardware/boards.json; firmware contracts check consistency. .github/workflows/test.yml runs Python 3.10/3.12 tests and doctor on macOS/Windows/Linux. CI cannot establish real USB behavior, both module types, power/motors or OTA. Original local testing was macOS; Windows/Linux physical USB and motor acceptance remain separate from central maintainer-confirmed results.
