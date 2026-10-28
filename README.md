@@ -1,4 +1,4 @@
-> [统一使用文档](https://github.com/xlle-er/KARI-DF26) · 首次 KARI 固件尚待真机验收，稳定 Release 发布前，默认 latest 不可用；维护者可使用下文 --assets 指向本地构建结果。
+> [统一使用文档](https://github.com/xlle-er/KARI-DF26) · 默认安装最新 KARI 稳定固件；离线部署可使用下文 --assets 指向配套本地构建结果。
 
 > [KARI 统一使用文档](https://github.com/xlle-er/KARI-DF26) · 本次为新应用身份与新设备配置，需要重新安装和配置。当前验证结果见 [KARI 验证状态](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md)，历史验证不计入本次通过项。
 
@@ -20,7 +20,7 @@ Agent 首先询问“你使用的是活动方推荐的开发板吗？”（是 /
 
 随后可选择让 Agent 帮你烧录或使用网页；已提供的信息不会重复询问。Agent 会检查 USB 设备、下载校验最新稳定固件、烧录并回读验证。多个串口时需要选择目标设备；依赖安装在项目独立环境中。不会自动点动电机、擦除 NVS 或覆盖未知分区。
 
-**网页入口尚未上线。** [网页安装源码](https://github.com/xlle-er/KARI-DF26-Firmware/tree/main/installer)可本地运行，使用电脑 Chrome / Edge，通过 HTTPS 或 localhost 打开；公开部署完成前推荐 Agent 烧录。
+**[打开网页安装入口](https://xlle-er.github.io/KARI-DF26-Firmware/)。** [网页安装源码](https://github.com/xlle-er/KARI-DF26-Firmware/tree/main/installer)可本地运行，使用电脑 Chrome / Edge，通过 HTTPS 或 localhost 打开；也可使用 Agent 烧录。
 
 ## 手动使用
 
