@@ -1,3 +1,5 @@
+> [统一使用文档](https://github.com/xlle-er/KARI-DF26) · 首次 KARI 固件尚待真机验收，稳定 Release 发布前，默认 latest 不可用；维护者可使用下文 --assets 指向本地构建结果。
+
 > [KARI 统一使用文档](https://github.com/xlle-er/KARI-DF26) · 本次为新应用身份与新设备配置，需要重新安装和配置。当前验证结果见 [KARI 验证状态](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md)，历史验证不计入本次通过项。
 
 # KARI-DF26-Skill
