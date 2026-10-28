@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kari-df26-deploy"
+version = "0.2.0"
+description = "KARI ESP32-S3 USB installation and persistent wiring configuration"
+requires-python = ">=3.10"
+dependencies = ["esptool==5.1.0", "pyserial==3.5", "certifi>=2024.8.30"]
+
+[project.scripts]
+kari-deploy = "kari_deploy.cli:main"
+
+[tool.setuptools.package-data]
+kari_deploy = ["boards.json"]
+
+[tool.setuptools.packages.find]
+include = ["kari_deploy*"]
+exclude = ["skills*", "tests*"]

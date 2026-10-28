@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.kari-deploy/
+.DS_Store
+
+# Local build and validation output
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+test-results/
+playwright-report/
